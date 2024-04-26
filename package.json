@@ -9,6 +9,11 @@
   "categories": [
     "Other"
   ],
+  "author": {
+    "name": "Kasper Søfren",
+    "email": "soefritz@gmail.com",
+    "url": "https://github.com/kafoso"
+  },
   "activationEvents": [],
   "main": "./extension.js",
   "contributes": {
