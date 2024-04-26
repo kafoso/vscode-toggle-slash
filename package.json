@@ -1,0 +1,40 @@
+{
+  "name": "toggle-slash",
+  "displayName": "toggle-slash",
+  "description": "Toggle between slashes and backslashes, or alternatively adds additional slashes or backslashes.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.88.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "toggle-slash.toggle-forward-slashes",
+        "title": "Toggle forward slash (\"\\\" -> \"/\" or \"/\" -> \"//\")."
+      },
+      {
+        "command": "toggle-slash.toggle-backslashes",
+        "title": "Toggle backslash (\"/\" -> \"\\\" or \"\\\" -> \"\\\\\")."
+      }
+    ]
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.6",
+    "@types/node": "18.x",
+    "@types/vscode": "^1.88.0",
+    "@vscode/test-cli": "^0.0.8",
+    "@vscode/test-electron": "^2.3.9",
+    "eslint": "^8.57.0",
+    "typescript": "^5.3.3"
+  }
+}
