@@ -54,36 +54,21 @@ function escapeRegExp(text) {
  * @param {string} firstMessage
  * @param {string} secondCheckCharacter
  * @param {string} secondMessage
- * @param {console|undefined} console
  */
 function toggleSlashes(
 	replacementCharacter,
 	firstCheckCharacter,
 	firstMessage,
 	secondCheckCharacter,
-	secondMessage,
-	console
+	secondMessage
 ) {
-	/**
-	 * @param  {...string} messages
-	 */
-	const log = (...messages) => {
-		if (console) {
-			console.log.apply(console, messages);
-		}
-	};
-
 	const editor = vscode.window.activeTextEditor;
-
-	log('editor', editor);
 
 	if (!editor) {
 		return;
 	}
 
 	const selection = editor.selection;
-
-	log('selection', selection);
 
 	if (!selection || selection.isEmpty) {
 		return;
