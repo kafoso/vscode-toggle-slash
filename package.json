@@ -19,12 +19,20 @@
   "contributes": {
     "commands": [
       {
-        "command": "toggle-slash.toggle-forward-slashes",
-        "title": "Toggle forward slash (\"\\\" -> \"/\" or \"/\" -> \"//\")."
+        "command": "toggle-slash.toggle-forward-slashes-conditionally",
+        "title": "Toggle forward slash conditionally (\"\\\" -> \"/\" or \"/\" -> \"//\")."
       },
       {
-        "command": "toggle-slash.toggle-backslashes",
-        "title": "Toggle backslash (\"/\" -> \"\\\" or \"\\\" -> \"\\\\\")."
+        "command": "toggle-slash.toggle-all-slashes-forward",
+        "title": "Toggle all slashes forward (\"\\\" -> \"/\" and \"/\" -> \"//\")."
+      },
+      {
+        "command": "toggle-slash.toggle-backslashes-conditionally",
+        "title": "Toggle backslash conditionally (\"/\" -> \"\\\" or \"\\\" -> \"\\\\\")."
+      },
+      {
+        "command": "toggle-slash.toggle-all-slashes-backward",
+        "title": "Toggle all slashes backward (\"/\" -> \"\\\" and \"\\\" -> \"\\\\\")."
       }
     ]
   },

@@ -1,38 +1,54 @@
 const vscode = require('vscode');
 
+class SelectionWithContext
+{
+	constructor(editor, selection, highlighted)
+	{
+		this.editor = editor;
+		this.selection = selection;
+		this.highlighted = highlighted;
+	}
+}
+
 /**
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
 	let disposableToggleForwardSlashes = vscode.commands.registerCommand(
-		'toggle-slash.toggle-forward-slashes',
+		'toggle-slash.toggle-forward-slashes-conditionally',
 		() => {
-			toggleSlashes(
-				'/',
-				'\\',
-				'Toggled all backslashes to forward slashes in selection.',
-				'/',
-				'Doubled all forward slashes in selection.',
-			);
+			toggleSlashesConditionallyForward();
 		}
 	);
 
 	context.subscriptions.push(disposableToggleForwardSlashes);
 
-	let disposableToggleBackSlashes = vscode.commands.registerCommand(
-		'toggle-slash.toggle-backslashes',
+	let disposableToggleAllSlashesForward = vscode.commands.registerCommand(
+		'toggle-slash.toggle-all-slashes-forward',
 		() => {
-			toggleSlashes(
-				'\\',
-				'/',
-				'Toggled all forward slashes to backslashes in selection.',
-				'\\',
-				'Doubled all backslashes in selection.',
-			);
+			toggleAllSlashesForward();
+		}
+	);
+
+	context.subscriptions.push(disposableToggleAllSlashesForward);
+
+	let disposableToggleBackSlashes = vscode.commands.registerCommand(
+		'toggle-slash.toggle-backslashes-conditionally',
+		() => {
+			toggleSlashesConditionallyBackward();
 		}
 	);
 
 	context.subscriptions.push(disposableToggleBackSlashes);
+
+	let disposableToggleAllSlashesBackward = vscode.commands.registerCommand(
+		'toggle-slash.toggle-all-slashes-backward',
+		() => {
+			toggleAllSlashesBackward();
+		}
+	);
+
+	context.subscriptions.push(disposableToggleAllSlashesBackward);
 }
 
 function deactivate() {}
@@ -49,29 +65,19 @@ function escapeRegExp(text) {
 }
 
 /**
- * @param {string} replacementCharacter
- * @param {string} firstCheckCharacter
- * @param {string} firstMessage
- * @param {string} secondCheckCharacter
- * @param {string} secondMessage
+ * @return SelectionWithContext|null
  */
-function toggleSlashes(
-	replacementCharacter,
-	firstCheckCharacter,
-	firstMessage,
-	secondCheckCharacter,
-	secondMessage
-) {
+function createSelectionWithContext() {
 	const editor = vscode.window.activeTextEditor;
 
 	if (!editor) {
-		return;
+		return null;
 	}
 
 	const selection = editor.selection;
 
 	if (!selection || selection.isEmpty) {
-		return;
+		return null;
 	}
 
 	const selectionRange = new vscode.Range(
@@ -84,32 +90,108 @@ function toggleSlashes(
 	const highlighted = editor.document.getText(selectionRange);
 
 	if (false === (highlighted && 'string' === typeof highlighted && highlighted.length)) {
+		return null;
+	}
+
+	return new SelectionWithContext(editor, selection, highlighted);
+}
+
+function toggleAllSlashesBackward() {
+	const selectionWithContext = createSelectionWithContext();
+
+	if (!selectionWithContext) {
 		return;
 	}
 
-	let regexp = new RegExp(escapeRegExp(firstCheckCharacter), 'g');
+	let replacement = selectionWithContext.highlighted.replace(/(\\)/g, '$1\\');
+	replacement = replacement.replace(/(\/)/g, '\\');
 
-	let replacement = highlighted.replace(regexp, replacementCharacter);
+	if (replacement !== selectionWithContext.highlighted) {
+		selectionWithContext.editor.edit(builder => {
+			builder.replace(selectionWithContext.selection, replacement);
 
-	if (replacement !== highlighted) {
-		editor.edit(builder => {
-			builder.replace(selection, replacement);
+			vscode.window.showInformationMessage('Toggled all slashes in selection backward.');
+		});
+	}
+}
 
-			vscode.window.showInformationMessage(firstMessage);
+function toggleAllSlashesForward() {
+	const selectionWithContext = createSelectionWithContext();
+
+	if (!selectionWithContext) {
+		return;
+	}
+
+	let replacement = selectionWithContext.highlighted.replace(/(\/)/g, '$1/');
+	replacement = replacement.replace(/(\\)/g, '/');
+
+	if (replacement !== selectionWithContext.highlighted) {
+		selectionWithContext.editor.edit(builder => {
+			builder.replace(selectionWithContext.selection, replacement);
+
+			vscode.window.showInformationMessage('Toggled all slashes in selection forward.');
+		});
+	}
+}
+
+function toggleSlashesConditionallyBackward() {
+	const selectionWithContext = createSelectionWithContext();
+
+	if (!selectionWithContext) {
+		return;
+	}
+
+	let replacement = selectionWithContext.highlighted.replace(/(\/)/g, '\\');
+
+	if (replacement !== selectionWithContext.highlighted) {
+		selectionWithContext.editor.edit(builder => {
+			builder.replace(selectionWithContext.selection, replacement);
+
+			vscode.window.showInformationMessage('Toggled all forward slashes to backslashes in selection.');
 		});
 
 		return;
 	}
 
-	regexp = new RegExp(escapeRegExp(secondCheckCharacter), 'g');
+	replacement = replacement.replace(/(\\)/g, '$1\\');
 
-	replacement = highlighted.replace(regexp, replacementCharacter + replacementCharacter);
+	if (replacement !== selectionWithContext.highlighted) {
+		selectionWithContext.editor.edit(builder => {
+			builder.replace(selectionWithContext.selection, replacement);
 
-	if (replacement !== highlighted) {
-		editor.edit(builder => {
-			builder.replace(selection, replacement);
+			vscode.window.showInformationMessage('Doubled all backslashes in selection.');
+		});
 
-			vscode.window.showInformationMessage(secondMessage);
+		return;
+	}
+}
+
+function toggleSlashesConditionallyForward() {
+	const selectionWithContext = createSelectionWithContext();
+
+	if (!selectionWithContext) {
+		return;
+	}
+
+	let replacement = selectionWithContext.highlighted.replace(/(\\)/g, '/');
+
+	if (replacement !== selectionWithContext.highlighted) {
+		selectionWithContext.editor.edit(builder => {
+			builder.replace(selectionWithContext.selection, replacement);
+
+			vscode.window.showInformationMessage('Toggled all backslashes to forward slashes in selection.');
+		});
+
+		return;
+	}
+
+	replacement = replacement.replace(/(\/)/g, '$1/');
+
+	if (replacement !== selectionWithContext.highlighted) {
+		selectionWithContext.editor.edit(builder => {
+			builder.replace(selectionWithContext.selection, replacement);
+
+			vscode.window.showInformationMessage('Doubled all forward slashes in selection.');
 		});
 
 		return;
@@ -119,6 +201,9 @@ function toggleSlashes(
 module.exports = {
 	activate,
 	deactivate,
-	toggleSlashes,
+	toggleAllSlashesBackward,
+	toggleAllSlashesForward,
+	toggleSlashesConditionallyForward,
+	toggleSlashesConditionallyBackward,
 	escapeRegExp
 }
