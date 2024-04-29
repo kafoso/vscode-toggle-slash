@@ -15,6 +15,10 @@ This functionality is largely inspired by [https://github.com/skandasoft/toggle-
 
 This extension is especially great for **PHP**, where file paths on Linux and MacOS (Unix) contain forward slashes, but PHP namespaces contain backslashes ([https://www.php.net/manual/en/language.namespaces.php](https://www.php.net/manual/en/language.namespaces.php)). On Windows, copying the file path (e.g. via the command `"File: Copy Relative Path of Active File"`) will contain backslashes, but you may, in your application code, need all of these to be converted into forward slashes.
 
+# Known limitations
+
+Utilizing column selection (e.g. via `cursorColumnSelectDown` and/or `cursorColumnSelectUp`) or making multiple character selections across multiple lines, will still only apply the commands to the line containing the caret.
+
 # Credits
 
 ## Authors
