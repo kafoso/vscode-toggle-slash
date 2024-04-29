@@ -74,10 +74,27 @@ function createSelectionWithContext() {
 		return null;
 	}
 
-	const selection = editor.selection;
+	let selection = editor.selection;
 
-	if (!selection || selection.isEmpty) {
+	if (!selection) {
 		return null;
+	}
+
+	if (selection.isEmpty) {
+		const currentLineRange = editor.document.lineAt(selection.active.line).range;
+
+		if (currentLineRange.e.character <= 0) {
+			return null;
+		}
+
+		selection = new vscode.Selection(
+			selection.start.line,
+			0,
+			selection.start.line,
+			currentLineRange.e.character,
+		);
+
+		editor.selection = selection;
 	}
 
 	const selectionRange = new vscode.Range(
