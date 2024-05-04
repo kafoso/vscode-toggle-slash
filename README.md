@@ -1,6 +1,6 @@
 # toggle-slash extension for Visual Studio Code
 
-An extension for Visual Studio Code, which toggle between slashes and backslashes, or alternatively adds additional slashes or backslashes.
+An extension for Visual Studio Code, which allows the user to toggle between slashes and backslashes, or alternatively add additional slashes or backslashes.
 
 |Command|Action|
 |-|-|

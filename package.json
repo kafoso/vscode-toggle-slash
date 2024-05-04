@@ -1,7 +1,7 @@
 {
   "name": "toggle-slash",
   "displayName": "toggle-slash",
-  "description": "Toggle between slashes and backslashes, or alternatively adds additional slashes or backslashes.",
+  "description": "Toggle between slashes and backslashes, or alternatively add additional slashes or backslashes.",
   "version": "0.0.3",
   "publisher": "kafoso",
   "repository": "https://github.com/kafoso/vscode-toggle-slash",
