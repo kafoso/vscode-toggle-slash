@@ -4,6 +4,7 @@
   "description": "Toggle between slashes and backslashes, or alternatively adds additional slashes or backslashes.",
   "version": "0.0.2",
   "publisher": "kafoso",
+  "repository": "https://github.com/kafoso/vscode-toggle-slash",
   "engines": {
     "vscode": "^1.88.0"
   },
