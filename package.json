@@ -3,6 +3,7 @@
   "displayName": "toggle-slash",
   "description": "Toggle between slashes and backslashes, or alternatively adds additional slashes or backslashes.",
   "version": "0.0.1",
+  "publisher": "kafoso",
   "engines": {
     "vscode": "^1.88.0"
   },
